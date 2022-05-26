@@ -1713,15 +1713,18 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 				}
 
 			} else {
-#ifdef DEBUG_ENABLED
-
-				if (state.debug_draw == VS::VIEWPORT_DEBUG_DRAW_WIREFRAME && s->array_wireframe_id) {
-					glDrawElementsInstanced(GL_LINES, s->index_wireframe_len, GL_UNSIGNED_INT, nullptr, amount);
-					storage->info.render.vertices_count += s->index_array_len * amount;
-				} else
-#endif
-
-						if (s->index_array_len > 0) {
+				if (s->index_array_len > 0) {
+					float points[2400];
+					for (int i = 0; i < 800; i++) {
+					// 	points[i] = (((float)random()) / (float)RAND_MAX) * .10 - .05;
+					points[i*3] = i%20;
+					points[i*3+1] = (i/20)%20;
+					points[i*3+2] = (i/20)/20;
+					}
+					glBindBuffer(GL_ARRAY_BUFFER, 6000); /// magic number hopefully won't overwrite existing anyuthing
+					glBufferData(GL_ARRAY_BUFFER, 2400 * sizeof(float), points, GL_STATIC_DRAW);
+					glEnableVertexAttribArray(8);
+					glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
 
 					glDrawElementsInstanced(gl_primitive[s->primitive], s->index_array_len, (s->array_len >= (1 << 16)) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT, nullptr, amount);
 

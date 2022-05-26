@@ -57,10 +57,10 @@ layout(location = 7) in highp vec4 bone_weights; // attrib:7
 
 #ifdef USE_INSTANCING
 
-layout(location = 8) in highp vec4 instance_xform0;
-layout(location = 9) in highp vec4 instance_xform1;
-layout(location = 10) in highp vec4 instance_xform2;
-layout(location = 11) in lowp vec4 instance_color;
+layout(location = 8) in highp vec3 instance_pos;
+//layout(location = 9) in highp vec4 instance_xform1;
+//layout(location = 10) in highp vec4 instance_xform2;
+//layout(location = 11) in lowp vec4 instance_color;
 
 #if defined(ENABLE_INSTANCE_CUSTOM)
 layout(location = 12) in highp vec4 instance_custom_data;
@@ -356,7 +356,9 @@ void main() {
 #ifdef USE_INSTANCING
 
 	{
-		highp mat4 m = mat4(instance_xform0, instance_xform1, instance_xform2, vec4(0.0, 0.0, 0.0, 1.0));
+		//highp mat4 m = mat4(instance_xform0, instance_xform1, instance_xform2, vec4(0.0, 0.0, 0.0, 1.0));
+		highp mat4 m =mat4(1.0);
+		//m[3] = vec4(instance_pos,1.0);
 		world_matrix = world_matrix * transpose(m);
 	}
 #endif
@@ -497,6 +499,9 @@ VERTEX_SHADER_CODE
 // using local coordinates (default)
 #if !defined(SKIP_TRANSFORM_USED) && !defined(VERTEX_WORLD_COORDS_USED)
 
+#ifdef USE_INSTANCING
+	vertex.rgb += instance_pos;
+#endif
 	vertex = modelview * vertex;
 
 #if defined(ENSURE_CORRECT_NORMALS)
@@ -527,6 +532,7 @@ VERTEX_SHADER_CODE
 #endif
 
 	vertex_interp = vertex.xyz;
+	
 	normal_interp = normal;
 
 #if defined(ENABLE_TANGENT_INTERP) || defined(ENABLE_NORMALMAP) || defined(LIGHT_USE_ANISOTROPY)
