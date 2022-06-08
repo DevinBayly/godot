@@ -1758,6 +1758,10 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 					float atime = e->instance->transform.origin.x;
 					// this is also a normalized time between 0 and 1 
 					scan_num = int(atime*num_scans);
+					if (scan_num > num_scans) {
+						scan_num = num_scans-1;
+					}
+
 					ifile.seekg(scan_num*num_bytes_per, std::ios::beg);
 					std::vector<char> buf{};
 					buf.resize(num_bytes_per);
