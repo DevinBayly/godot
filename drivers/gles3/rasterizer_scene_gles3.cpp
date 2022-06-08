@@ -1728,30 +1728,6 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 
 			} else {
 				if (s->index_array_len > 0) {
-					// // open the suzanne binary data
-					// std::string name = "/home/dash/Documents/cpp/suz.binary";
-					// std::ifstream ifile(name);
-					// // get the size of the file
-					// ifile.seekg(0, std::ios::end);
-					// int size = ifile.tellg();
-					// ifile.seekg(0, std::ios::beg);
-					// uint32_t num_floats = size / sizeof(float);
-					// uint32_t num_points = num_floats / 3;
-					// std::vector<char> buf{};
-					// buf.resize(size);
-					// ifile.read(buf.data(), size);
-					// ifile.close();
-					// float *points = reinterpret_cast<float *>(buf.data());
-
-					// glBindBuffer(GL_ARRAY_BUFFER, 6000); /// magic number hopefully won't overwrite existing anyuthing
-					// glBufferData(GL_ARRAY_BUFFER, size, points, GL_STATIC_DRAW);
-					// glEnableVertexAttribArray(8);
-					// glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
-
-					// glDrawElementsInstanced(gl_primitive[s->primitive], s->index_array_len, (s->array_len >= (1 << 16)) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT, nullptr, num_points);
-
-					// storage->info.render.vertices_count += s->index_array_len * amount;
-
 				} else {
 					// open the suzanne binary data
 					// use the transform on the particle system to get the scan number to use
