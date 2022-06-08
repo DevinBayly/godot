@@ -31,7 +31,10 @@
 #include "shader_gles3.h"
 
 #include "core/print_string.h"
-
+#include <fstream>
+#include <iostream>
+#include <vector>
+static int fileoutcount =0;
 //#define DEBUG_OPENGL
 
 #ifdef DEBUG_OPENGL
@@ -108,6 +111,9 @@ GLint ShaderGLES3::get_uniform_location(int p_index) const {
 }
 
 bool ShaderGLES3::bind() {
+	// if this shader we are binding isn't the active one
+	// not version, so assuming version starts at 0? or is undefined or unset ptr
+	// or new cond key isn't the conditional version
 	if (active != this || !version || new_conditional_version.key != conditional_version.key) {
 		conditional_version = new_conditional_version;
 		version = get_current_version();
@@ -290,7 +296,6 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 		//print_line("vert strings "+itos(i)+":"+String(strings[i]));
 	}
 #endif
-
 	v.vert_id = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(v.vert_id, strings.size(), &strings[0], nullptr);
 	glCompileShader(v.vert_id);
@@ -589,7 +594,29 @@ void ShaderGLES3::setup(const char **p_conditional_defines, int p_conditional_co
 				}
 			}
 		}
+		int len = 0;
+		const char * ptr = p_vertex_code;
+		std::string chars{};
+		while (*(ptr++)!=0) {
+			len++;
+			chars+=*ptr;
+		}
+
+		std::string first_part= "/tmp/test";
+		std::string ending = ".txt";
+		std::string number = std::to_string(fileoutcount);
+		std::string wholename = first_part+number+ending;
+		std::ofstream ofile(wholename);
+		ofile.write(chars.data(),chars.size());
+		fileoutcount++;
+		ofile.close();
 	}
+	// std::string s;
+	// for (int i = 0; i < strings.size(); i++) {
+	// 	const char * piece = strings[i];
+	// 	s = std::string(piece);
+	// }
+	// std::cout << s.c_str() << std::endl;
 
 	{
 		String globals_tag = "\nFRAGMENT_SHADER_GLOBALS";

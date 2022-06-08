@@ -36,10 +36,24 @@
 #include "rasterizer_canvas_gles3.h"
 #include "servers/camera/camera_feed.h"
 #include "servers/visual/visual_server_raster.h"
+#include <filesystem>
+#include <fstream>
+#include <vector>
 
 #ifndef GLES_OVER_GL
 #define glClearDepth glClearDepthf
 #endif
+
+static std::string name = "/home/bigo/Downloads/cpp/all_scans.bin";
+static std::ifstream ifile;
+// get the size of the file
+static int size;
+static uint32_t num_points_per;
+static uint32_t num_floats_per;
+static uint32_t num_bytes_per;
+static uint32_t num_scans;
+// static uint32_t num_floats = size / sizeof(float);
+static uint32_t scan_num = 0; // this will increment as the frames go by
 
 static const GLenum _cube_side_enum[6] = {
 
@@ -1714,24 +1728,48 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 
 			} else {
 				if (s->index_array_len > 0) {
-					float points[2400];
-					for (int i = 0; i < 800; i++) {
-					// 	points[i] = (((float)random()) / (float)RAND_MAX) * .10 - .05;
-					points[i*3] = i%20;
-					points[i*3+1] = (i/20)%20;
-					points[i*3+2] = (i/20)/20;
-					}
+					// // open the suzanne binary data
+					// std::string name = "/home/dash/Documents/cpp/suz.binary";
+					// std::ifstream ifile(name);
+					// // get the size of the file
+					// ifile.seekg(0, std::ios::end);
+					// int size = ifile.tellg();
+					// ifile.seekg(0, std::ios::beg);
+					// uint32_t num_floats = size / sizeof(float);
+					// uint32_t num_points = num_floats / 3;
+					// std::vector<char> buf{};
+					// buf.resize(size);
+					// ifile.read(buf.data(), size);
+					// ifile.close();
+					// float *points = reinterpret_cast<float *>(buf.data());
+
+					// glBindBuffer(GL_ARRAY_BUFFER, 6000); /// magic number hopefully won't overwrite existing anyuthing
+					// glBufferData(GL_ARRAY_BUFFER, size, points, GL_STATIC_DRAW);
+					// glEnableVertexAttribArray(8);
+					// glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+
+					// glDrawElementsInstanced(gl_primitive[s->primitive], s->index_array_len, (s->array_len >= (1 << 16)) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT, nullptr, num_points);
+
+					// storage->info.render.vertices_count += s->index_array_len * amount;
+
+				} else {
+					// open the suzanne binary data
+					// use the transform on the particle system to get the scan number to use
+					float atime = e->instance->transform.origin.x;
+					// this is also a normalized time between 0 and 1 
+					scan_num = int(atime*num_scans);
+					ifile.seekg(scan_num*num_bytes_per, std::ios::beg);
+					std::vector<char> buf{};
+					buf.resize(num_bytes_per);
+					ifile.read(buf.data(), num_bytes_per);
+					float *points = reinterpret_cast<float *>(buf.data());
+
 					glBindBuffer(GL_ARRAY_BUFFER, 6000); /// magic number hopefully won't overwrite existing anyuthing
-					glBufferData(GL_ARRAY_BUFFER, 2400 * sizeof(float), points, GL_STATIC_DRAW);
+					glBufferData(GL_ARRAY_BUFFER, num_bytes_per, points, GL_STATIC_DRAW);
 					glEnableVertexAttribArray(8);
 					glVertexAttribPointer(8, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
 
-					glDrawElementsInstanced(gl_primitive[s->primitive], s->index_array_len, (s->array_len >= (1 << 16)) ? GL_UNSIGNED_INT : GL_UNSIGNED_SHORT, nullptr, amount);
-
-					storage->info.render.vertices_count += s->index_array_len * amount;
-
-				} else {
-					glDrawArraysInstanced(gl_primitive[s->primitive], 0, s->array_len, amount);
+					glDrawArraysInstanced(gl_primitive[s->primitive], 0, s->array_len, num_points_per);
 
 					storage->info.render.vertices_count += s->array_len * amount;
 				}
@@ -5258,6 +5296,18 @@ void RasterizerSceneGLES3::finalize() {
 }
 
 RasterizerSceneGLES3::RasterizerSceneGLES3() {
+	name = "/home/bigo/Downloads/cpp/all_scans.bin";
+	ifile.open(name);
+	// get the size of the file
+	ifile.seekg(0, std::ios::end);
+	size = ifile.tellg();
+	ifile.seekg(0, std::ios::beg);
+	num_points_per = 262144;
+	num_floats_per = num_points_per * 3;
+	num_bytes_per = sizeof(float) * num_floats_per;
+	num_scans = size / num_bytes_per;
+	//  num_floats = size / sizeof(float);
+	scan_num = 0; // this will increment as the frames go by
 }
 
 RasterizerSceneGLES3::~RasterizerSceneGLES3() {

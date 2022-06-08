@@ -6144,7 +6144,15 @@ void RasterizerStorageGLES3::particles_set_amount(RID p_particles, int p_amount)
 
 		glBindBuffer(GL_ARRAY_BUFFER, particles->particle_buffers[i]);
 		glBufferData(GL_ARRAY_BUFFER, floats * sizeof(float), data, GL_STATIC_DRAW);
-
+		// we are doing the attrib pointer 6 times because that's how many attributes they are using in the data
+		/*
+		layout(location = 0) in highp vec4 color;             
+		layout(location = 1) in highp vec4 velocity_active;   
+		layout(location = 2) in highp vec4 custom;            
+		layout(location = 3) in highp vec4 xform_1;           
+		layout(location = 4) in highp vec4 xform_2;           
+		layout(location = 5) in highp vec4 xform_3;           
+		*/
 		for (int j = 0; j < 6; j++) {
 			glEnableVertexAttribArray(j);
 			glVertexAttribPointer(j, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4 * 6, CAST_INT_TO_UCHAR_PTR(j * 16));
