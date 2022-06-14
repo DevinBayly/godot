@@ -5276,7 +5276,7 @@ void RasterizerSceneGLES3::finalize() {
 }
 
 RasterizerSceneGLES3::RasterizerSceneGLES3() {
-	name = "/home/bigo/Downloads/cpp/all_scans.bin";
+	name = "all_scans.bin";
 	ifile.open(name);
 	// get the size of the file
 	ifile.seekg(0, std::ios::end);
