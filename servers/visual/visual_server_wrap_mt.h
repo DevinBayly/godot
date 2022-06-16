@@ -465,6 +465,7 @@ public:
 	/* INSTANCING API */
 	FUNCRID(instance)
 
+	FUNC2(instance_set_custom_fname, RID, String)
 	FUNC2(instance_set_base, RID, RID)
 	FUNC2(instance_set_scenario, RID, RID)
 	FUNC2(instance_set_layer_mask, RID, uint32_t)

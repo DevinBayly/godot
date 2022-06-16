@@ -431,7 +431,12 @@ RID VisualServerScene::instance_create() {
 
 	return instance_rid;
 }
+void VisualServerScene::instance_set_custom_fname(RID p_instance, String cfname) {
 
+	Instance *instance = instance_owner.get(p_instance);
+	instance->custom_fname = cfname;
+
+}
 void VisualServerScene::instance_set_base(RID p_instance, RID p_base) {
 	Instance *instance = instance_owner.get(p_instance);
 	ERR_FAIL_COND(!instance);

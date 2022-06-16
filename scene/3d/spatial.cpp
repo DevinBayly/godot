@@ -328,6 +328,9 @@ void Spatial::set_translation(const Vector3 &p_translation) {
 		notification(NOTIFICATION_LOCAL_TRANSFORM_CHANGED);
 	}
 }
+void Spatial::set_custom_fname(RID p_instance, String cfname) {
+	VS::get_singleton()->instance_set_custom_fname(p_instance, cfname);
+}
 
 void Spatial::set_rotation(const Vector3 &p_euler_rad) {
 	if (data.dirty & DIRTY_VECTORS) {
@@ -721,6 +724,7 @@ void Spatial::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_translation", "translation"), &Spatial::set_translation);
 	ClassDB::bind_method(D_METHOD("get_translation"), &Spatial::get_translation);
 	ClassDB::bind_method(D_METHOD("set_rotation", "euler"), &Spatial::set_rotation);
+	ClassDB::bind_method(D_METHOD("set_custom_fname", "RID","String"), &Spatial::set_custom_fname);
 	ClassDB::bind_method(D_METHOD("get_rotation"), &Spatial::get_rotation);
 	ClassDB::bind_method(D_METHOD("set_rotation_degrees", "euler_degrees"), &Spatial::set_rotation_degrees);
 	ClassDB::bind_method(D_METHOD("get_rotation_degrees"), &Spatial::get_rotation_degrees);

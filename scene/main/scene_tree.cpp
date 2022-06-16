@@ -480,6 +480,8 @@ bool SceneTree::iteration(float p_time) {
 
 	flush_transform_notifications();
 
+	auto rt_ele = get_edited_scene_root();
+	//print_line(rt_ele->to_string());
 	MainLoop::iteration(p_time);
 	physics_process_time = p_time;
 

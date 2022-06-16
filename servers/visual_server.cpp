@@ -2124,6 +2124,7 @@ void VisualServer::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("instance_create2", "base", "scenario"), &VisualServer::instance_create2);
 	ClassDB::bind_method(D_METHOD("instance_create"), &VisualServer::instance_create);
+	ClassDB::bind_method(D_METHOD("instance_set_custom_fname", "instance", "String"), &VisualServer::instance_set_custom_fname);
 	ClassDB::bind_method(D_METHOD("instance_set_base", "instance", "base"), &VisualServer::instance_set_base);
 	ClassDB::bind_method(D_METHOD("instance_set_scenario", "instance", "scenario"), &VisualServer::instance_set_scenario);
 	ClassDB::bind_method(D_METHOD("instance_set_layer_mask", "instance", "mask"), &VisualServer::instance_set_layer_mask);

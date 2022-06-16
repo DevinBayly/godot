@@ -89,6 +89,7 @@ public:
 		RID skeleton;
 		RID material_override;
 
+		String custom_fname;
 		Transform transform;
 
 		int depth_layer;
@@ -130,6 +131,7 @@ public:
 			cast_shadows = VS::SHADOW_CASTING_SETTING_ON;
 			receive_shadows = true;
 			visible = true;
+			custom_fname= "";
 			depth_layer = 0;
 			layer_mask = 1;
 			baked_light = false;
