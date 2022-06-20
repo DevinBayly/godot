@@ -34,6 +34,8 @@ jobs:
       run: scons platform=x11 use_llvm=yes use_lld=yes -j$(nproc)
     - name: show dir
       run: ls -rtlh
+    - name: show bin
+      run: ls bin -rtlh
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
