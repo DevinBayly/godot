@@ -3,8 +3,8 @@ name: Publish
 on: [push, workflow_dispatch]
 
 jobs:
-  build:
-    name: Publish binaries
+  buildnormal:
+    name: Publish binaries normal
     runs-on: ubuntu-latest
     container: 
       image: "ghcr.io/devinbayly/godot_custom:latest"
@@ -12,12 +12,34 @@ jobs:
     - uses: actions/checkout@v2
     - name: BuildScons
       run: scons platform=x11 -j$(nproc)
+    - name: show dir
+      run: ls -rtlh
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: bin/godot.x11.tools.64
+        asset_name: godot_normal
+        tag: ${{ github.ref }}
+        overwrite: true
+        body: "This is my release text"
+  buildllvm:
+    name: Publish binaries llvm
+    runs-on: ubuntu-latest
+    container: 
+      image: "ghcr.io/devinbayly/godot_custom:latest"
+    steps:
+    - uses: actions/checkout@v2
+    - name: BuildScons
+      run: scons platform=x11 use_llvm=yes use_lld=yes -j$(nproc)
+    - name: show dir
+      run: ls -rtlh
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: bin/godot.x11.tools.64.llvm
-        asset_name: mything
+        asset_name: godot_llvm
         tag: ${{ github.ref }}
         overwrite: true
         body: "This is my release text"
