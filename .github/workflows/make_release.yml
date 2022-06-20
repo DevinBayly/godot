@@ -1,0 +1,26 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Publish binaries
+    runs-on: ubuntu-latest
+    container: 
+      image: "ghcr.io/devinbayly/godot_custom:latest"
+    steps:
+    - uses: actions/checkout@v2
+    - name: BuildScons
+      run: scons platform=x11 use_llvm=yes use_lld=yes j$(nproc)
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: bin/godot.x11.tools.64.llvm
+        asset_name: mything
+        tag: ${{ github.ref }}
+        overwrite: true
+        body: "This is my release text"
