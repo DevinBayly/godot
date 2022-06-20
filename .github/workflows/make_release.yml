@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: BuildScons
-      run: scons platform=x11 use_llvm=yes use_lld=yes -j$(nproc)
+      run: scons platform=x11 -j$(nproc)
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
