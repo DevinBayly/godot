@@ -23,6 +23,26 @@ jobs:
         tag: ${{ github.ref }}
         overwrite: true
         body: "This is my release text"
+  buildwindows:
+    name: Publish binaries for windows
+    runs-on: ubuntu-latest
+    container: 
+      image: "ghcr.io/devinbayly/godot_custom:latest"
+    steps:
+    - uses: actions/checkout@v2
+    - name: BuildScons
+      run: scons platform=windows -j$(nproc)
+    - name: show dir
+      run: ls -rtlh
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: bin/godot.windows.tools.64.exe
+        asset_name: godot_windows.exe
+        tag: ${{ github.ref }}
+        overwrite: true
+        body: "This is my release text"
   buildllvm:
     name: Publish binaries llvm
     runs-on: ubuntu-latest
