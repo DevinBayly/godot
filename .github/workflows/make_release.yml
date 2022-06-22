@@ -34,6 +34,23 @@ jobs:
       run: scons platform=windows -j$(nproc)
     - name: show dir
       run: ls -rtlh
+    - name: store artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: godot_windows.exe
+        path: bin/godot.windows.tools.64.exe
+        retention-days: 1
+  attemptwindowspush:
+    needs: buildwindows
+    runs-on: ubuntu-latest
+    container: 
+      image: "ghcr.io/devinbayly/godot_custom:latest"
+    steps:
+    - name: get artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: godot_windows.exe
+        path: bin/godot.windows.tools.64.exe
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
@@ -43,6 +60,8 @@ jobs:
         tag: ${{ github.ref }}
         overwrite: true
         body: "This is my release text"
+    
+    
   buildllvm:
     name: Publish binaries llvm
     runs-on: ubuntu-latest
