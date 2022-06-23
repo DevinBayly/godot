@@ -12,8 +12,22 @@ jobs:
     - uses: actions/checkout@v2
     - name: BuildScons
       run: scons platform=x11 -j$(nproc)
-    - name: show dir
-      run: ls -rtlh
+    - name: store artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: godot_normal
+        path: bin/godot.x11.tools.64
+        retention-days: 1
+  pushnormal:
+    needs: buildnormal
+    name: Push normal binaries
+    runs-on: ubuntu-latest
+    steps:
+    - name: get artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: godot_normal
+        path: bin/godot.x11.tools.64
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
@@ -63,7 +77,7 @@ jobs:
     
     
   buildllvm:
-    name: Publish binaries llvm
+    name: build binaries llvm
     runs-on: ubuntu-latest
     container: 
       image: "ghcr.io/devinbayly/godot_custom:latest"
@@ -75,6 +89,22 @@ jobs:
       run: ls -rtlh
     - name: show bin
       run: ls bin -rtlh
+    - name: store artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: godot_llvm
+        path: bin/godot.x11.tools.64.llvm
+        retention-days: 1
+  pushllvm:
+    needs: buildllvm
+    name: Push binaries
+    runs-on: ubuntu-latest
+    steps:
+    - name: get artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: godot_llvm
+        path: bin/godot.x11.tools.64.llvm
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
