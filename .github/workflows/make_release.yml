@@ -34,7 +34,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: bin/godot.x11.tools.64
         asset_name: godot_normal
-        tag: ${{ github.ref }}
+        tag: release
         overwrite: true
         body: "This is my release text"
   buildwindows:
@@ -71,7 +71,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: bin/godot.windows.tools.64.exe
         asset_name: godot_windows.exe
-        tag: ${{ github.ref }}
+        tag: release
         overwrite: true
         body: "This is my release text"
     
@@ -111,6 +111,6 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: bin/godot.x11.tools.64.llvm
         asset_name: godot_llvm
-        tag: ${{ github.ref }}
+        tag: release
         overwrite: true
         body: "This is my release text"
