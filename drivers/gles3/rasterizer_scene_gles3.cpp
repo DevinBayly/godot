@@ -5288,7 +5288,7 @@ void file_helper(String cfname) {
 		if (ifile.is_open()) {
 			ifile.close();
 		}
-		ifile.open(name);
+		ifile.open(name,std::ios::binary);
 		if (ifile) {
 			print_line("file seems to open");
 			// get the size of the file

@@ -359,7 +359,7 @@ void main() {
 		//highp mat4 m = mat4(instance_xform0, instance_xform1, instance_xform2, vec4(0.0, 0.0, 0.0, 1.0));
 		highp mat4 m =mat4(1.0);
 		//m[3] = vec4(instance_pos,1.0);
-		world_matrix = world_matrix * transpose(m);
+		//world_matrix = world_matrix * transpose(m);
 	}
 #endif
 
