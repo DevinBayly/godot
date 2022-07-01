@@ -46,7 +46,7 @@ void file_helper(String cfname);
 static std::string name = "nofile";
 static std::ifstream ifile;
 // get the size of the file
-static int size;
+static size_t size;
 static uint32_t num_points_per;
 static uint32_t num_floats_per;
 static uint32_t num_bytes_per;
