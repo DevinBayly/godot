@@ -2631,15 +2631,15 @@ void VisualServerScene::_prepare_scene(const Transform p_cam_transform, const Ca
 			}
 		}
 
-		if (!keep) {
-			// remove, no reason to keep
-			instance_cull_count--;
-			SWAP(instance_cull_result[i], instance_cull_result[instance_cull_count]);
-			i--;
-			ins->last_render_pass = 0; // make invalid
-		} else {
+		// if (!keep) {
+		// 	// remove, no reason to keep
+		// 	instance_cull_count--;
+		// 	SWAP(instance_cull_result[i], instance_cull_result[instance_cull_count]);
+		// 	i--;
+		// 	ins->last_render_pass = 0; // make invalid
+		// } else {
 			ins->last_render_pass = render_pass;
-		}
+		// }
 	}
 
 	/* STEP 5 - PROCESS LIGHTS */
