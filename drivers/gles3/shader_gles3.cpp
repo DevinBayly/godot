@@ -34,7 +34,6 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-static int fileoutcount =0;
 //#define DEBUG_OPENGL
 
 #ifdef DEBUG_OPENGL
