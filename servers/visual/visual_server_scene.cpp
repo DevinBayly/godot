@@ -2568,7 +2568,7 @@ void VisualServerScene::_prepare_scene(const Transform p_cam_transform, const Ca
 			}
 
 		} else if (((1 << ins->base_type) & VS::INSTANCE_GEOMETRY_MASK) && ins->visible && ins->cast_shadows != VS::SHADOW_CASTING_SETTING_SHADOWS_ONLY) {
-			keep = true;
+			// keep = true;
 
 			InstanceGeometryData *geom = static_cast<InstanceGeometryData *>(ins->base_data);
 
@@ -2580,7 +2580,7 @@ void VisualServerScene::_prepare_scene(const Transform p_cam_transform, const Ca
 				//particles visible? process them
 				if (VSG::storage->particles_is_inactive(ins->base)) {
 					//but if nothing is going on, don't do it.
-					keep = false;
+					// keep = false;
 				} else {
 					VSG::storage->particles_request_process(ins->base);
 					//particles visible? request redraw
