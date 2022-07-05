@@ -2515,7 +2515,7 @@ void VisualServerScene::_prepare_scene(const Transform p_cam_transform, const Ca
 	for (int i = 0; i < instance_cull_count; i++) {
 		Instance *ins = instance_cull_result[i];
 
-		bool keep = false;
+		// bool keep = false;
 
 		if ((camera_layer_mask & ins->layer_mask) == 0) {
 			//failure
