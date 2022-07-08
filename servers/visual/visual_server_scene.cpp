@@ -2515,7 +2515,7 @@ void VisualServerScene::_prepare_scene(const Transform p_cam_transform, const Ca
 	for (int i = 0; i < instance_cull_count; i++) {
 		Instance *ins = instance_cull_result[i];
 
-		// bool keep = false;
+		bool keep = false;
 
 		if ((camera_layer_mask & ins->layer_mask) == 0) {
 			//failure
@@ -2568,7 +2568,7 @@ void VisualServerScene::_prepare_scene(const Transform p_cam_transform, const Ca
 			}
 
 		} else if (((1 << ins->base_type) & VS::INSTANCE_GEOMETRY_MASK) && ins->visible && ins->cast_shadows != VS::SHADOW_CASTING_SETTING_SHADOWS_ONLY) {
-			// keep = true;
+			keep = true;
 
 			InstanceGeometryData *geom = static_cast<InstanceGeometryData *>(ins->base_data);
 
@@ -2580,7 +2580,7 @@ void VisualServerScene::_prepare_scene(const Transform p_cam_transform, const Ca
 				//particles visible? process them
 				if (VSG::storage->particles_is_inactive(ins->base)) {
 					//but if nothing is going on, don't do it.
-					// keep = false;
+					keep = false;
 				} else {
 					VSG::storage->particles_request_process(ins->base);
 					//particles visible? request redraw
@@ -2631,15 +2631,15 @@ void VisualServerScene::_prepare_scene(const Transform p_cam_transform, const Ca
 			}
 		}
 
-		// if (!keep) {
-		// 	// remove, no reason to keep
-		// 	instance_cull_count--;
-		// 	SWAP(instance_cull_result[i], instance_cull_result[instance_cull_count]);
-		// 	i--;
-		// 	ins->last_render_pass = 0; // make invalid
-		// } else {
+		if (!keep) {
+			// remove, no reason to keep
+			instance_cull_count--;
+			SWAP(instance_cull_result[i], instance_cull_result[instance_cull_count]);
+			i--;
+			ins->last_render_pass = 0; // make invalid
+		} else {
 			ins->last_render_pass = render_pass;
-		// }
+		}
 	}
 
 	/* STEP 5 - PROCESS LIGHTS */
