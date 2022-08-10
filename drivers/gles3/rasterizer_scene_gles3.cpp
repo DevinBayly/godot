@@ -37,6 +37,7 @@
 #include "servers/camera/camera_feed.h"
 #include "servers/visual/visual_server_raster.h"
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 #ifndef GLES_OVER_GL
@@ -53,6 +54,7 @@ static uint32_t num_bytes_per;
 static uint32_t num_scans;
 // static uint32_t num_floats = size / sizeof(float);
 static uint32_t scan_num = 0; // this will increment as the frames go by
+static float atime = 0.0;
 
 static const GLenum _cube_side_enum[6] = {
 
@@ -1730,14 +1732,17 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 				} else {
 					if (e->instance->custom_fname != "") {
 						file_helper(e->instance->custom_fname);
+						if (!ifile) {
+							std::cout << "file error, might need to reopen" << std::endl;
+						}
 						if (size > 0) {
 							// open the suzanne binary data
 							// use the transform on the particle system to get the scan number to use
-							float atime = e->instance->transform.origin.x;
 							// this is also a normalized time between 0 and 1
-							scan_num = int(atime * num_scans);
-							if (scan_num > num_scans) {
-								scan_num = num_scans - 1;
+							scan_num +=1;
+							if (scan_num == num_scans) {
+								scan_num = 0;
+								atime = 0.0;
 							}
 
 							ifile.seekg(scan_num * num_bytes_per, std::ios::beg);
