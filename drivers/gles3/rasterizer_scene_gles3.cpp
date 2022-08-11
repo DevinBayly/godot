@@ -53,7 +53,7 @@ static uint32_t num_floats_per;
 static uint32_t num_bytes_per;
 static uint32_t num_scans;
 // static uint32_t num_floats = size / sizeof(float);
-static uint32_t scan_num = 0; // this will increment as the frames go by
+static float scan_num = 0.0; // this will increment as the frames go by
 static float atime = 0.0;
 
 static const GLenum _cube_side_enum[6] = {
@@ -1739,13 +1739,13 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 							// open the suzanne binary data
 							// use the transform on the particle system to get the scan number to use
 							// this is also a normalized time between 0 and 1
-							scan_num +=1;
-							if (scan_num == num_scans) {
+							scan_num +=e->instance->playback_scalar;
+							if (scan_num > num_scans-1) {
 								scan_num = 0;
 								atime = 0.0;
 							}
 
-							ifile.seekg(scan_num * num_bytes_per, std::ios::beg);
+							ifile.seekg(uint32_t(scan_num) * num_bytes_per, std::ios::beg);
 							std::vector<char> buf{};
 							buf.resize(num_bytes_per);
 							ifile.read(buf.data(), num_bytes_per);
@@ -5306,7 +5306,7 @@ void file_helper(String cfname) {
 			num_bytes_per = sizeof(float) * num_floats_per;
 			num_scans = size / num_bytes_per;
 			//  num_floats = size / sizeof(float);
-			scan_num = 0; // this will increment as the frames go by
+			scan_num = 0.0; // this will increment as the frames go by
 		} else {
 			size = -1;
 		}
