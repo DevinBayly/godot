@@ -34,7 +34,6 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-static int fileoutcount =0;
 //#define DEBUG_OPENGL
 
 #ifdef DEBUG_OPENGL
@@ -594,22 +593,7 @@ void ShaderGLES3::setup(const char **p_conditional_defines, int p_conditional_co
 				}
 			}
 		}
-		int len = 0;
-		const char * ptr = p_vertex_code;
-		std::string chars{};
-		while (*(ptr++)!=0) {
-			len++;
-			chars+=*ptr;
-		}
 
-		std::string first_part= "/tmp/test";
-		std::string ending = ".txt";
-		std::string number = std::to_string(fileoutcount);
-		std::string wholename = first_part+number+ending;
-		std::ofstream ofile(wholename);
-		ofile.write(chars.data(),chars.size());
-		fileoutcount++;
-		ofile.close();
 	}
 	// std::string s;
 	// for (int i = 0; i < strings.size(); i++) {
