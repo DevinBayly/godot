@@ -437,6 +437,12 @@ void VisualServerScene::instance_set_custom_fname(RID p_instance, String cfname)
 	instance->custom_fname = cfname;
 
 }
+void VisualServerScene::instance_set_playback_scalar(RID p_instance, float playback_scalar) {
+
+	Instance *instance = instance_owner.get(p_instance);
+	instance->playback_scalar = playback_scalar;
+
+}
 void VisualServerScene::instance_set_base(RID p_instance, RID p_base) {
 	Instance *instance = instance_owner.get(p_instance);
 	ERR_FAIL_COND(!instance);

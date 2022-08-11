@@ -148,6 +148,7 @@ public:
 
 	Ref<World> get_world() const;
 	void set_custom_fname(RID p_instance,String cfname) ;
+	void set_playback_scalar(RID p_instance,float playback_scalar) ;
 	void set_translation(const Vector3 &p_translation);
 	void set_rotation(const Vector3 &p_euler_rad);
 	void set_rotation_degrees(const Vector3 &p_euler_deg);

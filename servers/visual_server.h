@@ -846,6 +846,7 @@ public:
 	virtual RID instance_create() = 0;
 
 	virtual void instance_set_custom_fname(RID p_instance, String cfname) = 0;
+	virtual void instance_set_playback_scalar(RID p_instance, float playback_scalar) = 0;
 	virtual void instance_set_base(RID p_instance, RID p_base) = 0;
 	virtual void instance_set_scenario(RID p_instance, RID p_scenario) = 0;
 	virtual void instance_set_layer_mask(RID p_instance, uint32_t p_mask) = 0;

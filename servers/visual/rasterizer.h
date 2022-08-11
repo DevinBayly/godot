@@ -90,6 +90,7 @@ public:
 		RID material_override;
 
 		String custom_fname;
+		float playback_scalar;
 		Transform transform;
 
 		int depth_layer;
@@ -132,6 +133,7 @@ public:
 			receive_shadows = true;
 			visible = true;
 			custom_fname= "";
+			playback_scalar = 1.0;
 			depth_layer = 0;
 			layer_mask = 1;
 			baked_light = false;

@@ -543,6 +543,7 @@ public:
 	BIND0R(RID, instance_create)
 
 	BIND2(instance_set_custom_fname, RID, String)
+	BIND2(instance_set_playback_scalar, RID, float)
 	BIND2(instance_set_base, RID, RID)
 	BIND2(instance_set_scenario, RID, RID)
 	BIND2(instance_set_layer_mask, RID, uint32_t)
