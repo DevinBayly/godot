@@ -5301,7 +5301,7 @@ void file_helper(String cfname) {
 			size = ifile.tellg();
 			print_line("size is " + itos(size));
 			ifile.seekg(0, std::ios::beg);
-			num_points_per = 262144;
+			num_points_per = 40000;
 			num_floats_per = num_points_per * 3;
 			num_bytes_per = sizeof(float) * num_floats_per;
 			num_scans = size / num_bytes_per;
