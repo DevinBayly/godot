@@ -52,6 +52,7 @@ static uint32_t num_floats_per;
 static uint32_t num_bytes_per;
 static uint32_t num_scans;
 // static uint32_t num_floats = size / sizeof(float);
+static std::vector<char> buf{};
 static uint32_t scan_num = 0; // this will increment as the frames go by
 
 static const GLenum _cube_side_enum[6] = {
@@ -1735,15 +1736,15 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 							// use the transform on the particle system to get the scan number to use
 							float atime = e->instance->transform.origin.x;
 							// this is also a normalized time between 0 and 1
-							scan_num = int(atime * num_scans);
-							if (scan_num > num_scans) {
-								scan_num = num_scans - 1;
-							}
+// 							scan_num = int(atime * num_scans);
+// 							if (scan_num > num_scans) {
+// 								scan_num = num_scans - 1;
+// 							}
 
-							ifile.seekg(scan_num * num_bytes_per, std::ios::beg);
-							std::vector<char> buf{};
-							buf.resize(num_bytes_per);
-							ifile.read(buf.data(), num_bytes_per);
+// 							ifile.seekg(scan_num * num_bytes_per, std::ios::beg);
+// 							std::vector<char> buf{};
+// 							buf.resize(num_bytes_per);
+// 							ifile.read(buf.data(), num_bytes_per);
 							float *points = reinterpret_cast<float *>(buf.data());
 
 							glBindBuffer(GL_ARRAY_BUFFER, 6000); /// magic number hopefully won't overwrite existing anyuthing
@@ -5296,9 +5297,11 @@ void file_helper(String cfname) {
 			size = ifile.tellg();
 			print_line("size is " + itos(size));
 			ifile.seekg(0, std::ios::beg);
-			num_points_per = 262144;
+			num_points_per = size/(sizeof(float)*3);
 			num_floats_per = num_points_per * 3;
-			num_bytes_per = sizeof(float) * num_floats_per;
+			num_bytes_per = size;
+			buf.resize(num_bytes_per);
+			ifile.read(buf.data(),num_bytes_per);
 			num_scans = size / num_bytes_per;
 			//  num_floats = size / sizeof(float);
 			scan_num = 0; // this will increment as the frames go by
