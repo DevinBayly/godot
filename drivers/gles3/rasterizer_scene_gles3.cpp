@@ -1734,19 +1734,7 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 						if (size > 0) {
 							// open the suzanne binary data
 							// use the transform on the particle system to get the scan number to use
-							// this is also a normalized time between 0 and 1
-							float atime = e->instance->transform.origin.x;
-
-							scan_num =(atime)* num_scans;
-							if (scan_num > num_scans-1) {
-								scan_num = 0;
-								atime = 0.0;
-							}
-
-// 							ifile.seekg(scan_num * num_bytes_per, std::ios::beg);
-// 							std::vector<char> buf{};
-// 							buf.resize(num_bytes_per);
-// 							ifile.read(buf.data(), num_bytes_per);
+							
 							float *points = reinterpret_cast<float *>(buf.data());
 
 							glBindBuffer(GL_ARRAY_BUFFER, 6000); /// magic number hopefully won't overwrite existing anyuthing
