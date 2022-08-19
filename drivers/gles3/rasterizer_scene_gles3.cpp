@@ -1739,7 +1739,7 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 							// open the suzanne binary data
 							// use the transform on the particle system to get the scan number to use
 							// this is also a normalized time between 0 and 1
-							float atime = e->instance->transform.origin.x;
+							atime = e->instance->transform.origin.x;
 
 							scan_num =(atime)* num_scans;
 							if (scan_num > num_scans-1) {
