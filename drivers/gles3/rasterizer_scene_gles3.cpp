@@ -37,6 +37,7 @@
 #include "servers/camera/camera_feed.h"
 #include "servers/visual/visual_server_raster.h"
 #include <fstream>
+#include <iostream>
 #include <vector>
 
 #ifndef GLES_OVER_GL
@@ -46,14 +47,14 @@ void file_helper(String cfname);
 static std::string name = "nofile";
 static std::ifstream ifile;
 // get the size of the file
-static int size;
+static size_t size;
 static uint32_t num_points_per;
 static uint32_t num_floats_per;
 static uint32_t num_bytes_per;
 static uint32_t num_scans;
 // static uint32_t num_floats = size / sizeof(float);
-static std::vector<char> buf{};
-static uint32_t scan_num = 0; // this will increment as the frames go by
+static float scan_num = 0.0; // this will increment as the frames go by
+static float atime = 0.0;
 
 static const GLenum _cube_side_enum[6] = {
 
@@ -1730,11 +1731,26 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 				if (s->index_array_len > 0) {
 				} else {
 					if (e->instance->custom_fname != "") {
-						file_helper(e->instance->custom_fname);
+						file_helper(e->instance->custom_fname,e->instance->playback_speed);
+						if (!ifile) {
+							std::cout << "file error, might need to reopen" << std::endl;
+						}
 						if (size > 0) {
 							// open the suzanne binary data
 							// use the transform on the particle system to get the scan number to use
-							
+							// this is also a normalized time between 0 and 1
+							float atime = e->instance->transform.origin.x;
+
+							scan_num =(atime)* num_scans;
+							if (scan_num > num_scans-1) {
+								scan_num = 0;
+								atime = 0.0;
+							}
+
+							ifile.seekg(uint32_t(scan_num) * num_bytes_per, std::ios::beg);
+							std::vector<char> buf{};
+							buf.resize(num_bytes_per);
+							ifile.read(buf.data(), num_bytes_per);
 							float *points = reinterpret_cast<float *>(buf.data());
 
 							glBindBuffer(GL_ARRAY_BUFFER, 6000); /// magic number hopefully won't overwrite existing anyuthing
@@ -5269,7 +5285,7 @@ void RasterizerSceneGLES3::iteration() {
 
 void RasterizerSceneGLES3::finalize() {
 }
-void file_helper(String cfname) {
+void file_helper(String cfname,float playback_speed) {
 	if (cfname != "" && String(name.c_str()) != cfname) {
 		print_line(cfname);
 		print_line("length " + itos(cfname.length()));
@@ -5287,14 +5303,12 @@ void file_helper(String cfname) {
 			size = ifile.tellg();
 			print_line("size is " + itos(size));
 			ifile.seekg(0, std::ios::beg);
-			num_points_per = size/(sizeof(float)*3);
+			num_points_per = int(playback_speed);
 			num_floats_per = num_points_per * 3;
-			num_bytes_per = size;
-			buf.resize(num_bytes_per);
-			ifile.read(buf.data(),num_bytes_per);
+			num_bytes_per = sizeof(float) * num_floats_per;
 			num_scans = size / num_bytes_per;
 			//  num_floats = size / sizeof(float);
-			scan_num = 0; // this will increment as the frames go by
+			scan_num = 0.0; // this will increment as the frames go by
 		} else {
 			size = -1;
 		}
