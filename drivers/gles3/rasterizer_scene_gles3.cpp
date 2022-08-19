@@ -1731,7 +1731,7 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 				if (s->index_array_len > 0) {
 				} else {
 					if (e->instance->custom_fname != "") {
-						file_helper(e->instance->custom_fname,e->instance->playback_speed);
+						file_helper(e->instance->custom_fname,e->instance->playback_scalar);
 						if (!ifile) {
 							std::cout << "file error, might need to reopen" << std::endl;
 						}
@@ -5285,7 +5285,7 @@ void RasterizerSceneGLES3::iteration() {
 
 void RasterizerSceneGLES3::finalize() {
 }
-void file_helper(String cfname,float playback_speed) {
+void file_helper(String cfname,float playback_scalar) {
 	if (cfname != "" && String(name.c_str()) != cfname) {
 		print_line(cfname);
 		print_line("length " + itos(cfname.length()));
@@ -5303,7 +5303,7 @@ void file_helper(String cfname,float playback_speed) {
 			size = ifile.tellg();
 			print_line("size is " + itos(size));
 			ifile.seekg(0, std::ios::beg);
-			num_points_per = int(playback_speed);
+			num_points_per = int(playback_scalar);
 			num_floats_per = num_points_per * 3;
 			num_bytes_per = sizeof(float) * num_floats_per;
 			num_scans = size / num_bytes_per;
