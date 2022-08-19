@@ -43,7 +43,7 @@
 #ifndef GLES_OVER_GL
 #define glClearDepth glClearDepthf
 #endif
-void file_helper(String cfname);
+void file_helper(String cfname,float playback_scalar);
 static std::string name = "nofile";
 static std::ifstream ifile;
 // get the size of the file
