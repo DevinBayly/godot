@@ -1736,10 +1736,13 @@ void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {
 							// use the transform on the particle system to get the scan number to use
 							float atime = e->instance->transform.origin.x;
 							// this is also a normalized time between 0 and 1
-// 							scan_num = int(atime * num_scans);
-// 							if (scan_num > num_scans) {
-// 								scan_num = num_scans - 1;
-// 							}
+							float atime = e->instance->transform.origin.x;
+
+							scan_num =(atime)* num_scans;
+							if (scan_num > num_scans-1) {
+								scan_num = 0;
+								atime = 0.0;
+							}
 
 // 							ifile.seekg(scan_num * num_bytes_per, std::ios::beg);
 // 							std::vector<char> buf{};
